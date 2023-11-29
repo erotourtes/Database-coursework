@@ -77,3 +77,40 @@ set url "localhost:3000"
 # delete access
 
 # curl -X DELETE $url/accesses/1 | jq '.'
+
+
+# --------------------
+# 3 Post
+# --------------------
+
+# get all posts
+
+# curl -X GET $url/posts | jq '.'
+
+
+# get post by id
+
+# curl -X GET $url/posts/4 | jq '.'
+
+
+# create post
+
+# curl -X POST -H "Content-Type: application/json" -d \
+# '{
+#   "title":"Post 1",
+#   "name":"name 1",
+#   "description":"description 1"
+# }' $url/posts | jq '.'
+
+
+# update post
+
+# curl -X PATCH -H "Content-Type: application/json" -d \
+# '{
+#   "title":"UPDATE: Post 1"
+# }' $url/posts/1 | jq '.'
+
+
+# delete post
+
+# curl -X DELETE $url/posts/1 | jq '.'
