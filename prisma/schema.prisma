@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Access {
+  id      Int      @id @default(autoincrement())
+  time    DateTime @db.DateTime(0)
+  User_id Int
+  Post_id Int
+  Post    Post     @relation(fields: [Post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Access_Post1")
+  User    User     @relation(fields: [User_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Access_User1")
+
+  @@index([Post_id], map: "fk_Access_Post1_idx")
+  @@index([User_id], map: "fk_Access_User1_idx")
+}
+
+model Category {
+  id          Int    @default(autoincrement())
+  name        String @db.VarChar(45)
+  description String @db.VarChar(45)
+  Category_id Int
+  Post_id     Int
+  Post        Post   @relation(fields: [Post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Category_Post1")
+
+  @@id([id, Post_id, Category_id])
+  @@index([Post_id], map: "fk_Category_Post1_idx")
+}
+
+model Data {
+  id         Int      @id @default(autoincrement())
+  size       String   @db.VarChar(45)
+  format     String   @db.VarChar(45)
+  name       String   @db.VarChar(45)
+  uploadedAt DateTime @db.DateTime(0)
+  Post       Post[]
+}
+
+model Organization_list {
+  id                                  Int                                   @id @default(autoincrement())
+  list_of_organizations               String                                @db.VarChar(45)
+  Organization_list_has_Organizations Organization_list_has_Organizations[]
+  User                                User[]
+}
+
+model Organization_list_has_Organizations {
+  Organization_list_id Int
+  Organizations_id     Int
+  Organization_list    Organization_list @relation(fields: [Organization_list_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Organization_list_has_Organizations_Organization_list1")
+  Organizations        Organizations     @relation(fields: [Organizations_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Organization_list_has_Organizations_Organizations1")
+
+  @@id([Organization_list_id, Organizations_id])
+  @@index([Organization_list_id], map: "fk_Organization_list_has_Organizations_Organization_list1_idx")
+  @@index([Organizations_id], map: "fk_Organization_list_has_Organizations_Organizations1_idx")
+}
+
+model Organizations {
+  id                                  Int                                   @id @default(autoincrement())
+  name                                String                                @db.VarChar(45)
+  description                         String?                               @db.VarChar(45)
+  Organization_list_has_Organizations Organization_list_has_Organizations[]
+}
+
+model Permission {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(45)
+  Permission_has_Role Permission_has_Role[]
+}
+
+model Permission_has_Role {
+  Permission_id Int
+  Role_id       Int
+  Permission    Permission @relation(fields: [Permission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Permission_has_Role_Permission1")
+  Role          Role       @relation(fields: [Role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Permission_has_Role_Role1")
+
+  @@id([Permission_id, Role_id])
+  @@index([Permission_id], map: "fk_Permission_has_Role_Permission1_idx")
+  @@index([Role_id], map: "fk_Permission_has_Role_Role1_idx")
+}
+
+model Post {
+  id          Int        @default(autoincrement()) @unique
+  name        String     @db.VarChar(45)
+  title       String     @db.VarChar(45)
+  description String?    @db.VarChar(45)
+  uploadedAt  DateTime   @db.DateTime(0)
+  updatedAt   DateTime   @db.DateTime(0)
+  Rating_id   Int
+  Data_id     Int
+  Access      Access[]
+  Category    Category[]
+  Data        Data       @relation(fields: [Data_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Post_Data1")
+  Rating      Rating     @relation(fields: [Rating_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Post_Rating1")
+
+  @@id([id, Rating_id, Data_id])
+  @@index([Data_id], map: "fk_Post_Data1_idx")
+  @@index([Rating_id], map: "fk_Post_Rating1_idx")
+}
+
+model Rating {
+  id    Int    @id @default(autoincrement())
+  value Float  @db.Float
+  Post  Post[]
+}
+
+model Role {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(45)
+  description         String?               @db.VarChar(45)
+  Permission_has_Role Permission_has_Role[]
+  User                User[]
+}
+
+model User {
+  id                   Int               @default(autoincrement()) @unique
+  login                String            @unique(map: "login_UNIQUE") @db.VarChar(45)
+  password             String            @db.VarChar(45)
+  mail                 String?           @db.VarChar(45)
+  name                 String?           @db.VarChar(45)
+  Organization_list_id Int
+  Role_id              Int
+  Access               Access[]
+  Organization_list    Organization_list @relation(fields: [Organization_list_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_User_Organization_list1")
+  Role                 Role              @relation(fields: [Role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_User_Role1")
+
+  @@id([id, Organization_list_id])
+  @@index([Organization_list_id], map: "fk_User_Organization_list1_idx")
+  @@index([Role_id], map: "fk_User_Role1_idx")
+}
