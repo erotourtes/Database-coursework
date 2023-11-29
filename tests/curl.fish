@@ -41,3 +41,39 @@ set url "localhost:3000"
 # delete user
 
 # curl -X DELETE $url/users/5 | jq '.'
+
+
+# --------------------
+# 2 Access
+# --------------------
+
+# get all accesses
+
+# curl -X GET $url/accesses | jq '.'
+
+
+# get access by id
+
+# curl -X GET $url/accesses/1 | jq '.'
+
+
+# create access
+
+# curl -X POST -H "Content-Type: application/json" -d \
+# '{
+#   "userId":1,
+#   "postId":1
+# }' $url/accesses | jq '.'
+
+
+# update access
+
+# curl -X PATCH -H "Content-Type: application/json" -d \
+# '{
+#   "time":"2023-11-29T14:05:25.917Z"
+# }' $url/accesses/1 | jq '.'
+
+
+# delete access
+
+# curl -X DELETE $url/accesses/1 | jq '.'

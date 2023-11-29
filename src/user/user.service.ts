@@ -70,4 +70,18 @@ export class UserService {
         throw new HttpException("Can't update user", 409, { cause: error });
       });
   }
+
+  async isUserValid(id: number) {
+    return await this.prisma.user
+      .findUnique({
+        where: { id },
+      })
+      .then((user) => {
+        if (user) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+  }
 }
