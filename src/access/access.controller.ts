@@ -11,7 +11,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AccessService } from './access.service';
-import { UpdateAccessDto } from './dtos/access.dtos';
+import { UpdateAccessDto } from './dto/access.dto';
 
 @Controller('accesses')
 export class AccessController {
