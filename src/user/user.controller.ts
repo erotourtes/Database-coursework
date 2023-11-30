@@ -11,6 +11,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Auth } from 'src/auth/auth.decorator';
 
 @Controller('users')
 export class UserController {
@@ -21,16 +22,19 @@ export class UserController {
     return await this.userService.create(data);
   }
 
+  @Auth(['admin'])
   @Get()
   async users() {
     return await this.userService.findAll();
   }
 
+  @Auth(['admin'], true)
   @Get(':id')
   async getUser(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.findOne(id);
   }
 
+  @Auth(['admin'], true)
   @Patch(':id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
@@ -39,6 +43,7 @@ export class UserController {
     return await this.userService.update(id, data);
   }
 
+  @Auth(['admin'], true)
   @Delete(':id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.delete(id);

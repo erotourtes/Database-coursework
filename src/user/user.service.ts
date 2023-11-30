@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ServerUserDto } from './dto/server-user.dto';
 
 @Injectable()
 export class UserService {
@@ -15,6 +16,31 @@ export class UserService {
     return await this.prisma.user.findUnique({
       where: { id },
     });
+  }
+
+  async findUserInternal(id: number): Promise<ServerUserDto> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: { Role: true, Organization_list: true },
+    });
+
+    return {
+      id: user.id,
+      login: user.login,
+      password: user.password,
+      mail: user.mail,
+      name: user.name,
+      organizationListId: user.Organization_list_id,
+      roleId: user.Role_id,
+      Role: {
+        id: user.Role.id,
+        name: user.Role.name,
+      },
+      OrganizationList: {
+        id: user.Organization_list.id,
+        name: user.Organization_list.list_of_organizations,
+      },
+    };
   }
 
   async create(user: CreateUserDto) {

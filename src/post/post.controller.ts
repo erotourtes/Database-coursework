@@ -11,6 +11,7 @@ import {
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Auth } from 'src/auth/auth.decorator';
 
 @Controller('posts')
 export class PostController {
@@ -31,6 +32,7 @@ export class PostController {
     return this.postService.findOne(id);
   }
 
+  @Auth(['admin'])
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -39,6 +41,7 @@ export class PostController {
     return this.postService.update(id, updatePostDto);
   }
 
+  @Auth(['admin'])
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.postService.remove(+id);

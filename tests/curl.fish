@@ -6,7 +6,9 @@
 
 set url "localhost:3000"
 
-#  get user by id
+#  get user by id add Authorization header
+
+# curl -X GET -H "Authorization: Bearer 2" $url/users/2 | jq '.'
 
 # curl -X GET $url/users/1 | jq '.'
 
