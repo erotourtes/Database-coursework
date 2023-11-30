@@ -12,6 +12,8 @@ import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Auth } from 'src/auth/auth.decorator';
+import { User } from 'src/auth/user.decorator';
+import { ServerUserDto } from 'src/user/dto/server-user.dto';
 
 @Controller('posts')
 export class PostController {
@@ -23,13 +25,13 @@ export class PostController {
   }
 
   @Get()
-  findAll() {
-    return this.postService.findAll();
+  findAll(@User() user?: ServerUserDto) {
+    return this.postService.findAll(user);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.postService.findOne(id);
+  findOne(@Param('id', ParseIntPipe) id: number, @User() user?: ServerUserDto) {
+    return this.postService.findOne(id, user);
   }
 
   @Auth(['admin'])

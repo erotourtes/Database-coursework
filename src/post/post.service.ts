@@ -2,10 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { AccessService } from 'src/access/access.service';
+import { ServerUserDto } from 'src/user/dto/server-user.dto';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly accessServcie: AccessService,
+  ) {}
 
   async create(createPostDto: CreatePostDto) {
     const newRating = await this.prisma.rating.create({
@@ -36,16 +41,24 @@ export class PostService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.post.findMany({
+  async findAll(user?: ServerUserDto) {
+    const posts = await this.prisma.post.findMany({
       include: {
         Rating: true,
         Data: true,
       },
     });
+
+    if (user)
+      posts.forEach((post) => {
+        this.accessServcie.create(user.id, post.id);
+      });
+
+    return posts;
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, user?: ServerUserDto) {
+    if (user) this.accessServcie.create(user.id, id);
     return await this.prisma.post.findUnique({
       where: {
         id: id,

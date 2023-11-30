@@ -8,5 +8,6 @@ import { UserModule } from 'src/user/user.module';
   providers: [AccessService],
   controllers: [AccessController],
   imports: [PrismaModule, UserModule],
+  exports: [AccessService],
 })
 export class AccessModule {}

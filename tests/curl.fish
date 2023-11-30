@@ -92,7 +92,7 @@ set url "localhost:3000"
 
 # get post by id
 
-# curl -X GET $url/posts/4 | jq '.'
+curl -X GET $url/posts/4 -H "Authorization: Bearer 3" | jq '.'
 
 
 # create post
