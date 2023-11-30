@@ -19,13 +19,13 @@ export class AccessService {
       );
     }
 
-    await this.prisma.post
-      .findUnique({ where: { id: postId } })
-      .catch((err) => {
-        throw new HttpException("Can't find post", HttpStatus.BAD_REQUEST, {
-          cause: err,
-        });
-      });
+    const post = await this.prisma.post.findUnique({ where: { id: postId } });
+    if (!post) {
+      throw new HttpException(
+        "Can't create access for post",
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     return await this.prisma.access.create({
       data: {

@@ -22,19 +22,19 @@ export class UserController {
     return await this.userService.create(data);
   }
 
-  @Auth(['admin'])
+  @Auth(['sadmin'])
   @Get()
   async users() {
     return await this.userService.findAll();
   }
 
-  @Auth(['admin'], true)
+  @Auth(['sadmin'], true)
   @Get(':id')
   async getUser(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.findOne(id);
   }
 
-  @Auth(['admin'], true)
+  @Auth(['sadmin'], true)
   @Patch(':id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
@@ -43,7 +43,7 @@ export class UserController {
     return await this.userService.update(id, data);
   }
 
-  @Auth(['admin'], true)
+  @Auth(['sadmin'], true)
   @Delete(':id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.delete(id);

@@ -1,48 +1,52 @@
 #!/bin/fish
 
+set url "localhost:3000"
+
 # --------------------
 # 1 User
 # --------------------
 
-set url "localhost:3000"
-
-#  get user by id add Authorization header
+#  get user by id
 
 # curl -X GET -H "Authorization: Bearer 2" $url/users/2 | jq '.'
 
-# curl -X GET $url/users/1 | jq '.'
+# curl -X GET $url/users/2 | jq '.'
 
 
 # get all users
 
-# curl -X GET $url/users | jq '.'
+# curl -X GET $url/users -H "Authorization: Bearer 1" | jq '.'
 
 
 # create user
 
 # curl -X POST -H "Content-Type: application/json" -d \
 # '{
-#   "login":"Johinator",
-#   "mail":"jo@hn.com",
+#   "login":"Johinator2000",
+#   "email":"jo@hn.com",
 #   "password":"password",
 #   "organizationListId":1,
-#   "role":"admin"
+#   "role":"sadmin"
 # }' $url/users | jq '.'
 
 
 # update user
 
-# curl -X PATCH -H "Content-Type: application/json" -d \
+# curl -X PATCH \
+#   -H "Content-Type: application/json" \
+#   -H "Authorization: Bearer 2" -d \
 # '{
 #   "login":"UPDATE: Johinator",
 #   "email":"updatejo@hn.com",
-#   "role":"admin"
-# }' $url/users/10 | jq '.'
+#   "role":"sadmin"
+# }' $url/users/2 | jq '.'
 
 
 # delete user
 
-# curl -X DELETE $url/users/5 | jq '.'
+# curl -X DELETE -H "Authorization: Bearer 1" $url/users/2 | jq '.'
+
+# curl -X DELETE $url/users/2 | jq '.'
 
 
 # --------------------
@@ -51,17 +55,21 @@ set url "localhost:3000"
 
 # get all accesses
 
+# curl -X GET $url/accesses -H "Authorization: Bearer 1" | jq '.'
+
 # curl -X GET $url/accesses | jq '.'
 
 
 # get access by id
 
-# curl -X GET $url/accesses/1 | jq '.'
+# curl -X GET $url/accesses/7 -H "Authorization: Bearer 1" | jq '.'
 
 
 # create access
 
-# curl -X POST -H "Content-Type: application/json" -d \
+# curl -X POST \
+#   -H "Content-Type: application/json" \
+#   -H "Authorization: Bearer 1" -d \
 # '{
 #   "userId":1,
 #   "postId":1
@@ -70,7 +78,9 @@ set url "localhost:3000"
 
 # update access
 
-# curl -X PATCH -H "Content-Type: application/json" -d \
+# curl -X PATCH \
+#   -H "Content-Type: application/json" \
+#   -H "Authorization: Bearer 1" -d \
 # '{
 #   "time":"2023-11-29T14:05:25.917Z"
 # }' $url/accesses/1 | jq '.'
@@ -78,7 +88,7 @@ set url "localhost:3000"
 
 # delete access
 
-# curl -X DELETE $url/accesses/1 | jq '.'
+# curl -X DELETE -H "Authorization: Bearer 1" $url/accesses/1 | jq '.'
 
 
 # --------------------
@@ -92,7 +102,7 @@ set url "localhost:3000"
 
 # get post by id
 
-curl -X GET $url/posts/4 -H "Authorization: Bearer 3" | jq '.'
+# curl -X GET $url/posts/3 -H "Authorization: Bearer 1" | jq '.'
 
 
 # create post
@@ -112,7 +122,11 @@ curl -X GET $url/posts/4 -H "Authorization: Bearer 3" | jq '.'
 #   "title":"UPDATE: Post 1"
 # }' $url/posts/1 | jq '.'
 
+# curl -X PATCH \
+# -H "Content-Type: application/json" \
+# -H "Authorization: Bearer 1" -d \
+# '{"title":"UPDATE: Post 1"}' $url/posts/1 | jq '.'
 
 # delete post
 
-# curl -X DELETE $url/posts/1 | jq '.'
+# curl -X DELETE -H "Authorization: Bearer 1" $url/posts/1 | jq '.'

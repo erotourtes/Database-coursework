@@ -14,7 +14,7 @@ import { AccessService } from './access.service';
 import { UpdateAccessDto } from './dto/access.dto';
 import { Auth } from 'src/auth/auth.decorator';
 
-@Auth(['admin'])
+@Auth(['sadmin'])
 @Controller('accesses')
 export class AccessController {
   constructor(private readonly accessService: AccessService) {}

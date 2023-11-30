@@ -15,9 +15,11 @@ export class PrismaExceptionFilter
   private readonly prismaClientKnownRequestErrorCodes = {
     P2002: HttpStatus.CONFLICT,
     P2025: HttpStatus.FORBIDDEN,
+    P2003: HttpStatus.BAD_REQUEST,
   };
 
   catch(exception: PrismaClientKnownRequestError, host: ArgumentsHost) {
+    console.log('PrismaExceptionFilter', exception);
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status =

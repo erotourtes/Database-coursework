@@ -34,7 +34,7 @@ export class PostController {
     return this.postService.findOne(id, user);
   }
 
-  @Auth(['admin'])
+  @Auth(['sadmin'])
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -43,9 +43,9 @@ export class PostController {
     return this.postService.update(id, updatePostDto);
   }
 
-  @Auth(['admin'])
+  @Auth(['sadmin'])
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
-    return this.postService.remove(+id);
+    return this.postService.remove(id);
   }
 }
