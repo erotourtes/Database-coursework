@@ -58,7 +58,10 @@ export class PostService {
   }
 
   async findOne(id: number, user?: ServerUserDto) {
-    if (user) this.accessServcie.create(user.id, id);
+    try {
+      if (user) await this.accessServcie.create(user.id, id);
+    } catch (e) {}
+
     return await this.prisma.post.findUnique({
       where: {
         id: id,
